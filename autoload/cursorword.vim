@@ -26,8 +26,7 @@ function! cursorword#matchadd() abort
   let word = matchstr(line[:(col('.')-1)], '\k*$') . matchstr(line[(col('.')-1):], '^\k*')[1:]
   if get(w:, 'cursorword_state', []) ==# [ linenr, word, enable ] | return | endif
   let w:cursorword_state = [ linenr, word, enable ]
-  call map(getmatches(), 'v:val.id == get(w:, "cursorword_id0", -1) && matchdelete(v:val.id)')
-  call map(getmatches(), 'v:val.id == get(w:, "cursorword_id1", -1) && matchdelete(v:val.id)')
+  call map(getmatches(), '(v:val.id == get(w:, "cursorword_id0", -1) || v:val.id == get(w:, "cursorword_id1", -1)) && matchdelete(v:val.id)')
   let w:cursorword_match = 0
   if !enable || word ==# '' || len(word) !=# strchars(word) | return | endif
   let pattern = '\<' . escape(word, '~"\.^$[]*') . '\>'
